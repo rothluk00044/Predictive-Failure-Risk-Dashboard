@@ -94,11 +94,11 @@ tool_wear = st.sidebar.slider(
 
 # Prepare input data
 input_data = pd.DataFrame([{
-    "Air temperature [K]": air_temp,
-    "Process temperature [K]": process_temp,
-    "Rotational speed [rpm]": rot_speed,
-    "Torque [Nm]": torque,
-    "Tool wear [min]": tool_wear
+    "Air temperature": air_temp,
+    "Process temperature": process_temp,
+    "Rotational speed": rot_speed,
+    "Torque": torque,
+    "Tool wear": tool_wear
 }])
 
 # Make prediction
