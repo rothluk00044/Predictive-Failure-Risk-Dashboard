@@ -980,46 +980,179 @@ with tab3:
 # TAB 4: ABOUT
 # ============================================================================
 with tab4:
-    st.header("About This Project")
+    st.header("📚 About This Project")
     
     st.markdown("""
     ## Predictive Failure Risk Dashboard
     
     A demonstration of applied machine learning for engineering decision support 
-    in industrial settings.
+    in predictive maintenance and industrial systems.
     
-    ### Dataset
-    - **Source:** UCI AI4I 2020 Predictive Maintenance Dataset
-    - **Size:** ~10,000 synthetic operating records
-    - **Features:** Air temperature, process temperature, rotational speed, torque, tool wear
-    - **Target:** Binary machine failure classification
+    ---
     
-    ### Model
-    - **Algorithm:** RandomForest Classifier (100 trees)
-    - **Training:** 80% train / 20% test split
-    - **Class Balancing:** Yes (to handle ~15% failure rate)
-    - **Test Accuracy:** {metrics['test_accuracy']:.1%}
+    ## Project Vision
     
-    ### Key Insights
-    - **Top predictor:** {feature_importance_df.iloc[0]['Feature']} ({feature_importance_df.iloc[0]['Importance']:.1%})
-    - **Most important factors:** Tool wear, rotational speed, torque stress
-    - **Implication:** Wear and mechanical stress dominate failure risk
+    This dashboard is not a production system or Gates product. Instead, it demonstrates 
+    how predictive analytics can transform raw model outputs into actionable 
+    engineering insights. The goal is to show thoughtful systems design: 
+    not just *accuracy*, but *usability* for engineers making real decisions.
     
-    ### What This Is NOT
-    - Not production-grade software
-    - Not based on real Gates product data
-    - Not replacing physical testing or validation
+    **Key Design Decisions:**
+    - **Sensitivity Analysis:** Engineers need to understand which variables matter most
+    - **Scenario Comparison:** Decisions are relative—compare against a baseline
+    - **Risk Trend Simulation:** Show how to monitor risk over time (not just one-off predictions)
+    - **Engineering Interpretation:** Translate ML outputs to failure modes engineers recognize
+    - **Honest Framing:** Be clear about what is demo data vs. real product data
     
-    ### Future Improvements
-    - Integrate real product test/field data
-    - Predict specific failure modes instead of binary
-    - Add time-series trend modeling (RUL estimation)
-    - Implement SHAP for per-prediction explainability
-    - Add design optimization recommendations
-    - Deploy on cloud platform (Streamlit Cloud, AWS, etc.)
+    ---
+    
     """)
     
-    st.markdown("---")
+    # Dataset Info
+    col_ds1, col_ds2 = st.columns(2)
+    
+    with col_ds1:
+        st.markdown("""
+        <div class='info-card'>
+            <div class='info-card-title'>📊 Dataset</div>
+        </div>
+        """, unsafe_allow_html=True)
+        
+        st.markdown(f"""
+        **Source:** UCI AI4I 2020 Predictive Maintenance Dataset
+        
+        **Records:** ~10,000 synthetic operating samples
+        
+        **Features:**
+        - Air temperature (K)
+        - Process temperature (K)
+        - Rotational speed (rpm)
+        - Torque (Nm)
+        - Tool wear (min)
+        
+        **Target:** Binary machine failure classification
+        
+        **Why This Dataset?** While synthetic, it mirrors real-world 
+        industrial telemetry (thermocouples, tachometers, load cells, 
+        wear sensors).
+        """)
+    
+    with col_ds2:
+        st.markdown("""
+        <div class='info-card'>
+            <div class='info-card-title'>🤖 Model Details</div>
+        </div>
+        """, unsafe_allow_html=True)
+        
+        st.markdown(f"""
+        **Algorithm:** RandomForest Classifier
+        
+        **Configuration:**
+        - 100 decision trees
+        - Balanced class weights (handles ~15% failure rate)
+        - Test accuracy: {metrics['test_accuracy']:.1%}
+        
+        **Why RandomForest?**
+        - Fast inference (production-ready)
+        - Feature importance is directly interpretable
+        - Handles non-linear relationships
+        - Robust to class imbalance
+        - No special dependencies beyond scikit-learn
+        
+        **Top Predictors:**
+        """)
+        
+        for idx, row in feature_importance_df.head(3).iterrows():
+            st.markdown(f"- **{row['Feature']}** ({row['Importance']:.1%})")
+    
+    # Test Performance
     st.markdown("""
-    **GitHub:** [Predictive-Failure-Risk-Dashboard](https://github.com/rothluk00044/Predictive-Failure-Risk-Dashboard)
+    <div class='info-card' style='margin-top: 20px;'>
+        <div class='info-card-title'>📈 Model Performance (Test Set)</div>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    perf_col1, perf_col2, perf_col3, perf_col4 = st.columns(4)
+    perf_col1.metric("Accuracy", f"{metrics['test_accuracy']:.1%}")
+    perf_col2.metric("Precision", f"{metrics['precision']:.1%}")
+    perf_col3.metric("Recall", f"{metrics['recall']:.1%}")
+    perf_col4.metric("F1 Score", f"{metrics['f1_score']:.1%}")
+    
+    # Key Insights
+    st.markdown("""
+    <div class='info-card' style='margin-top: 20px;'>
+        <div class='info-card-title'>💡 Key Insights</div>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    st.markdown(f"""
+    **Most Important Factors:**
+    - Tool wear drives failure risk more than any other factor
+    - High rotational speed and torque create cumulative mechanical stress
+    - Temperature effects are significant but secondary to wear
+    
+    **Implication for Engineering:**
+    - Maintenance schedules should prioritize wear monitoring
+    - Speed/load management is critical for reliability
+    - Thermal management is important but not the dominant failure driver
+    
+    **Data Pattern:**
+    - Failure events cluster in high-wear, high-stress scenarios
+    - Failures are relatively rare (~15% of dataset) but predictable
+    - Early identification of high-risk conditions is feasible
+    """)
+    
+    # Limitations
+    st.markdown("""
+    <div class='info-card' style='margin-top: 20px;'>
+        <div class='info-card-title'>⚠️ Important Limitations</div>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    st.markdown("""
+    ✗ **Not production software** – For demonstration only  
+    ✗ **Not based on real Gates data** – Synthetic dataset for learning  
+    ✗ **Not replacing physical testing** – Use alongside validation programs  
+    ✗ **No proprietary models** – Simple open-source algorithms  
+    ✗ **Binary predictions only** – Doesn't distinguish failure modes  
+    ✗ **No uncertainty quantification** – Point estimates, not confidence intervals  
+    """)
+    
+    # Future Work
+    st.markdown("""
+    <div class='info-card' style='margin-top: 20px;'>
+        <div class='info-card-title'>🚀 Future Enhancements</div>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    st.markdown("""
+    **Near-term:**
+    - SHAP values for per-prediction feature explanations
+    - Remaining Useful Life (RUL) estimation (time-series forecasting)
+    - Multi-class failure mode prediction
+    - Unit test coverage for data pipeline
+    
+    **Medium-term:**
+    - Real product test or field data integration
+    - Continuous retraining workflow
+    - API backend for manufacturing system integration
+    - Support for multiple product/asset types
+    
+    **Long-term:**
+    - Multi-model ensembles (RF + XGBoost + neural networks)
+    - Bayesian uncertainty quantification
+    - Causal inference (move beyond correlation)
+    - Docker containerization and cloud deployment (AWS/Azure)
+    - Model monitoring and drift detection
+    """)
+    
+    st.divider()
+    
+    st.markdown("""
+    **Questions or feedback?** This is a learning project. 
+    See the [GitHub repository](https://github.com/your-repo/predictive-failure-risk-dashboard) 
+    for source code and more details.
+    
+    ---
+    *A demonstration of thoughtful applied ML for engineering decision support.*
     """)
