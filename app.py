@@ -778,122 +778,202 @@ with tab2:
 # TAB 3: ENGINEERING INTERPRETATION
 # ============================================================================
 with tab3:
-    st.header("Engineering Perspective & Failure Modes")
+    st.header("🔧 Engineering Interpretation & Failure Modes")
     
     st.markdown("""
-    This section maps the model's binary failure prediction to potential 
-    real-world failure mechanisms. This is interpretive framing based on 
-    the operating variables in the model—not actual Gates product data.
+    This section translates model predictions into engineering language, connecting 
+    machine learning outputs to real failure mechanisms. This is interpretive analysis 
+    based on the operating variables—not actual Gates product data or proprietary information.
     """)
     
     # ========================================================================
     # Failure Mode Mapping
     # ========================================================================
-    st.subheader("Potential Failure Mode Pathways")
+    st.markdown("<div class='section-header'>⚡ Potential Failure Mode Pathways</div>", unsafe_allow_html=True)
     
     col_modes1, col_modes2 = st.columns(2)
     
     with col_modes1:
-        st.markdown("#### Temperature-Related Stress")
+        st.markdown("""
+        <div class='info-card'>
+            <div class='info-card-title'>🔥 Thermal Stress Pathway</div>
+        </div>
+        """, unsafe_allow_html=True)
+        
+        temp_risk = "High" if process_temp > 312 else "Moderate" if process_temp > 310 else "Low"
         st.markdown(f"""
-        **Current air/process temps:** {air_temp:.1f} K / {process_temp:.1f} K
+        **Current Air/Process Temps:** {air_temp:.1f} K / {process_temp:.1f} K
         
-        - Thermal cycling can cause material fatigue
-        - Lubrication breakdown at high temperatures
-        - Seal/gasket degradation
+        - Thermal cycling induces material fatigue
+        - Lubrication breakdown accelerates at high temperatures  
+        - Seal and gasket material degradation over time
+        - Differential expansion stresses joints and interfaces
         
-        **Risk factor:** {'High' if process_temp > 312 else 'Moderate' if process_temp > 310 else 'Low'}
+        **Assessment:** {temp_risk}
         """)
         
-        st.markdown("#### Speed & Load Stress")
+        st.markdown("""
+        <div class='info-card'>
+            <div class='info-card-title'>⚙️ Mechanical Stress Pathway</div>
+        </div>
+        """, unsafe_allow_html=True)
+        
+        stress_risk = "High" if (rot_speed > 2000 or torque > 60) else "Moderate" if (rot_speed > 1500 or torque > 40) else "Low"
         st.markdown(f"""
-        **Current speed/torque:** {rot_speed:.0f} rpm / {torque:.1f} Nm
+        **Current Speed/Torque:** {rot_speed:.0f} rpm / {torque:.1f} Nm
         
-        - High-speed operation increases fatigue cycles
-        - High torque stresses bearings and shafts
-        - Combined stress accelerates wear
+        - High rotational speed increases fatigue cycles per unit time
+        - High torque stresses bearings, shafts, and drive interfaces
+        - Combined stress accelerates progressive wear
+        - Resonance risks increase at certain speed/load combinations
         
-        **Risk factor:** {'High' if rot_speed > 2000 or torque > 60 else 'Moderate' if rot_speed > 1500 or torque > 40 else 'Low'}
+        **Assessment:** {stress_risk}
         """)
     
     with col_modes2:
-        st.markdown("#### Wear & Degradation")
+        st.markdown("""
+        <div class='info-card'>
+            <div class='info-card-title'>🛠️ Wear & Degradation Pathway</div>
+        </div>
+        """, unsafe_allow_html=True)
+        
+        wear_risk = "High" if tool_wear > 150 else "Moderate" if tool_wear > 75 else "Low"
         st.markdown(f"""
-        **Current tool wear:** {tool_wear:.0f} min
+        **Current Tool Wear:** {tool_wear:.0f} min
         
-        - Progressive wear increases friction
-        - Worn surfaces lose geometric precision
-        - Wear particles can trigger cascading failures
-        - Maintenance windows should be planned around wear thresholds
+        - Progressive wear increases friction and heat generation
+        - Worn surfaces lose geometric precision and load distribution
+        - Wear particles can trigger cascading micro-failures
+        - Tool life limits are typically defined by this metric
+        - Preventive replacement windows should align with wear thresholds
         
-        **Risk factor:** {'High' if tool_wear > 150 else 'Moderate' if tool_wear > 75 else 'Low'}
+        **Assessment:** {wear_risk}
+        """)
+        
+        st.markdown("""
+        <div class='info-card'>
+            <div class='info-card-title'>🌡️ Combined Stress Scenario</div>
+        </div>
+        """, unsafe_allow_html=True)
+        
+        combined_risk_factors = sum([
+            process_temp > 312,
+            rot_speed > 2000 or torque > 60,
+            tool_wear > 150
+        ])
+        
+        st.markdown(f"""
+        **Risk Factors Active:** {combined_risk_factors} / 3
+        
+        When multiple stress pathways activate simultaneously, failure risk 
+        increases more rapidly due to interaction effects and reduced safety margins.
         """)
     
     # ========================================================================
     # Engineering Recommendations
     # ========================================================================
-    st.subheader("Engineering Recommendations")
+    st.markdown("<div class='section-header'>💡 Engineering Recommendations</div>", unsafe_allow_html=True)
     
     if risk_probability < 0.20:
         st.success("""
-        **LOW RISK OPERATING ZONE**
+        ### ✅ Low Risk Zone – Continue Normal Operation
         
-        - Continue normal operation
-        - Maintain standard monitoring intervals
-        - Track tool wear trends over time
-        - Document normal operating baselines
+        **Operational Guidance:**
+        - Continue standard operating procedures
+        - Maintain normal monitoring intervals
+        - Document baseline conditions for trend analysis
+        - Track tool wear progression over time
+        - No immediate maintenance action required
+        
+        **Validation & Testing:**
+        - Current conditions validate design margins
+        - Consider this a safe operating envelope
+        - Good candidate for baseline performance data collection
         """)
+    
     elif risk_probability < 0.50:
         st.warning("""
-        **MEDIUM RISK - REVIEW REQUIRED**
+        ### ⚠️ Medium Risk Zone – Plan Maintenance Window
         
-        - Increase monitoring frequency
-        - Consider reducing speed or load if possible
-        - Plan preventive maintenance within next operating cycle
-        - Review thermal management / cooling adequacy
-        - Prepare replacement hardware for quick swap
+        **Operational Guidance:**
+        - Increase monitoring frequency and detail
+        - Consider gradual reduction of speed or load if feasible
+        - Schedule preventive maintenance within current operating cycle
+        - Improve thermal management or cooling system performance
+        - Prepare replacement components for rapid swap
+        
+        **Recommended Actions:**
+        1. Collect detailed telemetry over next 24–48 hours
+        2. Schedule maintenance inspection before next cycle
+        3. Identify backup hardware if mission-critical
+        4. Review and verify thermal management adequacy
+        5. Document conditions that triggered this alert
+        
+        **Testing & Validation:**
+        - Use this as an input case study for durability analysis
+        - Collect field or test data to validate model predictions
         """)
+    
     else:
         st.error("""
-        **HIGH RISK - URGENT ACTION**
+        ### 🚨 High Risk Zone – Urgent Action Required
         
-        - **Reduce operating stress immediately** (lower speed, torque, or temperature)
-        - Schedule maintenance intervention before next cycle
-        - Inspect for visible wear, degradation, or anomalies
-        - Consider switching to backup hardware if available
-        - Collect detailed telemetry to understand failure progression
+        **Immediate Actions:**
+        1. **REDUCE OPERATING STRESS** immediately
+           - Decrease rotational speed if possible
+           - Lower applied torque or load
+           - Reduce process temperature or improve cooling
+        2. **Schedule immediate maintenance inspection**
+        3. **Prepare for hardware replacement**
+        4. **Escalate to engineering/reliability team**
+        
+        **Operational Guidance:**
+        - Do not continue extended operation at current settings
+        - Collect detailed failure mode diagnostics
+        - Inspect visually for wear, cracks, thermal damage
+        - Review recent telemetry for anomalies
+        - Prepare comprehensive incident report
+        
+        **Testing & Validation:**
+        - Transition to backup hardware if available
+        - Gather failure data for post-mortem root cause analysis
+        - Use this case to refine predictive model and thresholds
         """)
     
     # ========================================================================
     # Gates Relevance
     # ========================================================================
-    st.subheader("Gates Corporation Use Cases")
+    st.markdown("<div class='section-header'>🏭 Applied ML in Engineering – Use Cases</div>", unsafe_allow_html=True)
     
     st.markdown("""
-    **How predictive maintenance applies to Gates products:**
+    This dashboard demonstrates how predictive analytics supports real engineering workflows:
     
-    1. **Predictive Performance Modeling**
-       - Estimate durability under different operating envelopes
-       - Predict belt/hose life from field operating conditions
-       
-    2. **Failure Mode Assessment**
-       - Identify which stress factors (temperature, speed, load) dominate failures
-       - Validate design margins against test/field data
-       
-    3. **Testing & Validation**
-       - Guide accelerated life testing parameters
-       - Predict when prototypes will fail under stress
-       - Optimize test schedules
-       
-    4. **Maintenance Planning**
-       - Alert field engineers to emerging failure risk
-       - Recommend proactive replacement intervals
-       - Reduce unexpected downtime
-       
-    5. **Decision Support**
-       - Quantify risk in terms engineers understand
-       - Provide data-driven recommendations
-       - Enable trade-off analysis (e.g., speed vs. reliability)
+    #### 1. **Predictive Durability Modeling**
+    - Estimate component/product life under different operating envelopes
+    - Predict service life from field operating conditions
+    - Identify which stress factors dominate failures
+    
+    #### 2. **Design Validation & Margins**
+    - Validate design margins against predicted failure risk
+    - Identify which design parameters need improvement
+    - Prioritize design improvements with data-driven analysis
+    
+    #### 3. **Accelerated Testing & Simulation**
+    - Guide accelerated life test (ALT) parameter selection
+    - Predict failure points without running full tests
+    - Optimize test duration and stress levels
+    
+    #### 4. **Field Maintenance & Support**
+    - Alert field engineers to emerging failure risk
+    - Recommend proactive maintenance and replacement intervals
+    - Reduce unexpected downtime and warranty costs
+    - Enable condition-based maintenance (CBM) strategies
+    
+    #### 5. **Decision Support & Trade-Off Analysis**
+    - Quantify reliability vs. performance trade-offs
+    - Provide data-driven recommendations to stakeholders
+    - Enable speed vs. safety comparisons with quantified risk
+    - Support cost/benefit analysis of design alternatives
     """)
 
 # ============================================================================
