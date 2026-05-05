@@ -206,9 +206,9 @@ Expected metrics (will vary slightly due to dataset randomness):
 
 ---
 
-## Future Improvements & Extensions
+## Improvements & Extensions
 
-### Short-term (Could add in interview follow-up)
+### Short-term
 
 - [ ] **SHAP Explainability**: Per-instance feature explanations ("This specific torque value increased risk by X%")
 - [ ] **Failure Mode Classification**: Predict *type* of failure (bearing, thermal, tool wear), not just binary
@@ -301,16 +301,7 @@ python -m streamlit run app.py
 **Built by**: Candidate for Gates Corporation Rotational Engineer (AI/ML + Engineering)  
 **Date**: May 2026  
 **Purpose**: Portfolio demonstration of applied ML in industrial/product development context  
-**License**: Open-source (feel free to share and build upon)
-
----
-
-## Questions? Ideas?
-
-If you're exploring this:
-- **For a homework/learning project**: Try modifying the model hyperparameters or using a different classifier
-- **For extending it**: Add real test data, built explainability, or deploy to the cloud
-- **For interview prep**: Use this as a template for building small, focused, narrative-driven ML projects
+**License**: OS (feel free to share and build upon)
 
 ---
 
