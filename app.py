@@ -20,11 +20,11 @@ st.set_page_config(
 )
 
 # Title and description
-st.title("🔧 Predictive Failure Risk Dashboard")
+st.title("Predictive Failure Risk Dashboard")
 st.markdown(
     """
-    An AI-enabled predictive maintenance tool that estimates failure risk from industrial operating conditions.  
-    **Use case**: Support engineering decision-making for product durability, testing, and field operations.
+    Estimates machine failure risk from industrial operating conditions.  
+    Supports maintenance planning, reliability assessment, and operational decision-making.
     """
 )
 
@@ -34,7 +34,7 @@ try:
     features = joblib.load("model_features.pkl")
 except FileNotFoundError:
     st.error(
-        "❌ Model files not found. Please run training first:\n"
+        "Model files not found. Please run training first:\n"
         "```\n"
         "python train_model.py\n"
         "```"
@@ -114,16 +114,16 @@ with col1:
     # Risk metric with color coding
     if risk_probability < 0.20:
         risk_color = "green"
-        risk_level = "🟢 LOW RISK"
-        recommendation = "✓ Continue normal operation. Monitor tool wear periodically."
+        risk_level = "LOW RISK"
+        recommendation = "Continue normal operation. Monitor tool wear periodically."
     elif risk_probability < 0.50:
         risk_color = "orange"
-        risk_level = "🟡 MEDIUM RISK"
-        recommendation = "⚠ Review operating conditions. Consider preventive maintenance schedule."
+        risk_level = "MEDIUM RISK"
+        recommendation = "Review operating conditions. Consider preventive maintenance schedule."
     else:
         risk_color = "red"
-        risk_level = "🔴 HIGH RISK"
-        recommendation = "🛑 Flag for engineering review. Plan maintenance intervention."
+        risk_level = "HIGH RISK"
+        recommendation = "Flag for engineering review. Plan maintenance intervention."
     
     # Display risk percentage
     st.markdown(f"<h2 style='text-align: center; color: {risk_color};'>{risk_probability:.1%}</h2>", unsafe_allow_html=True)

@@ -2,33 +2,20 @@
 
 ## Overview
 
-A **Gates-inspired predictive maintenance and failure risk dashboard** that demonstrates applied machine learning for industrial engineering workflows. This project uses real predictive maintenance data to train a classifier that estimates failure risk from operating conditions—translating raw sensor data into actionable engineering insights.
+A predictive maintenance dashboard that estimates machine failure risk from industrial operating conditions. This project applies machine learning to real-world predictive maintenance data, converting sensor telemetry into actionable failure risk assessments for engineering and operations teams.
 
-**Key idea**: In industries like Gates—where product durability, reliability, and field performance are critical—predictive models support test planning, durability analysis, and engineering decision-making. This dashboard showcases that workflow.
+The system trains a classifier on historical failure data and provides real-time predictions through an interactive web interface, enabling data-driven decision-making for maintenance planning, reliability assessment, and operational risk management.
 
 ---
 
-## Project Context
+## The Problem
 
-### Why I Built This
+Predictive maintenance requires answering three key questions:
+1. Will this equipment fail under current operating conditions?
+2. Which operating factors create the highest failure risk?
+3. What should operations do about it?
 
-This is an interview project created for a **Gates Corporation Rotational Engineer** role focused on applying AI/ML and advanced analytics to engineering and product development. The role emphasizes:
-
-- Predictive performance modeling and durability analysis
-- Failure mode assessment and risk quantification
-- Integration of test/simulation/field data into engineering workflows
-- AI-enabled tools for product development and validation
-
-**This dashboard demonstrates all four areas** in a clean, explainable, and realistic micro-scale project.
-
-### The Problem It Solves
-
-In product development and manufacturing, you want to know:
-1. **Will this product fail under these operating conditions?**
-2. **Which operating conditions create the highest risk?**
-3. **What should the engineering team do about it?**
-
-This tool answers those questions using supervised machine learning on historical failure data.
+This dashboard answers these questions using supervised machine learning on historical failure data.
 
 ---
 
@@ -92,15 +79,15 @@ python -m streamlit run app.py
 ```
 
 **What you see**:
-- **Operating conditions panel** (sidebar): Adjust temperature, speed, torque, wear with sliders
+- **Operating conditions panel** (sidebar): Adjust temperature, speed, torque, and wear with sliders
 - **Real-time risk prediction**: Model instantly predicts failure probability (0–100%)
 - **Risk categorization**: 
-  - 🟢 **Low** (<20%): Continue normal operation
-  - 🟡 **Medium** (20–50%): Review & monitor
-  - 🔴 **High** (>50%): Flag for review
-- **Recommended actions**: Engineering-facing recommendations (e.g., "Plan maintenance")
-- **Feature importance chart**: Visual breakdown of which factors drive failure risk
-- **Model metadata**: Accuracy, confidence, prediction details
+  - **Low Risk** (<20%): Continue normal operation
+  - **Medium Risk** (20–50%): Review and monitor
+  - **High Risk** (>50%): Flag for immediate review
+- **Recommended actions**: Operations recommendations (e.g., plan maintenance, increase monitoring)
+- **Feature importance chart**: Visual breakdown of which operating factors drive failure risk
+- **Model metadata**: Accuracy, confidence, and prediction details
 
 ---
 
@@ -210,35 +197,12 @@ Expected metrics (will vary slightly due to dataset randomness):
 
 ---
 
-## Use Cases & Interview Talking Points
+## Use Cases
 
-### How This Connects to Gates
-
-Gates manufactures power transmission belts, hoses, coupling, and other industrial components. This dashboard could support:
-
-1. **Durability Testing**: Predict which field operating conditions lead to early failure
-2. **Reliability Engineering**: Identify high-risk operating envelopes (temperature, speed, load)
-3. **Maintenance Planning**: Flag components/systems for preventive service
-4. **Design Validation**: Quantify risk under different design parameters
-5. **Decision Support**: Give field engineers and program managers data-driven recommendations
-
-### How to Present in Interview
-
-**Elevator pitch** (2 min):
-> "I built a predictive maintenance dashboard that takes industrial operating conditions—temperature, speed, torque, wear—and estimates failure risk using a RandomForest classifier. It converts model outputs into actionable engineering insights: Low/Medium/High risk categories with specific recommendations. The goal is to show how machine learning can support durability analysis and engineering decision-making in product development."
-
-**Deep dive** (if asked):
-- Dataset: UCI AI4I Predictive Maintenance; ~10k industrial operating records
-- Model: RandomForest (100 trees) with balanced class weights for ~15% failure rate
-- Performance: 94% accuracy, 69% precision, 65% recall on failures
-- Key insight: Tool wear and rotational speed are the strongest predictors of failure
-- Dashboard: Real-time prediction + feature importance + risk categorization + engineering recommendations
-
-**If asked "Why RandomForest?"**:
-- Fast to train and suitable for this prototype
-- Explainable feature importance (essential for engineering trust)
-- Inherent handling of non-linearities
-- If we scale: Could transition to gradient boosting or deep learning, but would still use SHAP for explainability
+- **Maintenance Planning**: Identify when components require preventive service based on predicted failure risk
+- **Operational Risk Assessment**: Quantify the failure impact of different operating envelopes (temperature, speed, load)
+- **Component Reliability**: Analyze which operating conditions lead to early failures
+- **Decision Support**: Provide data-driven recommendations to field engineers and operations teams
 
 ---
 
