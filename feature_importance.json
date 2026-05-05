@@ -1,0 +1,16 @@
+{
+  "features": [
+    "Air temperature",
+    "Process temperature",
+    "Rotational speed",
+    "Torque",
+    "Tool wear"
+  ],
+  "importances": [
+    0.09296768693357467,
+    0.05858429031771692,
+    0.3132596707270619,
+    0.32018620934138337,
+    0.21500214268026308
+  ]
+}
