@@ -31,11 +31,11 @@ def main():
     
     # Keep only the engineering-style numeric features
     features = [
-        "Air temperature [K]",
-        "Process temperature [K]",
-        "Rotational speed [rpm]",
-        "Torque [Nm]",
-        "Tool wear [min]"
+        "Air temperature",
+        "Process temperature",
+        "Rotational speed",
+        "Torque",
+        "Tool wear"
     ]
     
     X = X[features]
