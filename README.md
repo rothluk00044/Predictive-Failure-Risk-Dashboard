@@ -1,5 +1,7 @@
 # Predictive Failure Risk Dashboard # test new branch commit
 
+# If using PS, launch browser via: python -m streamlit run app.py 
+
 ## Overview
 
 A predictive maintenance dashboard that estimates machine failure risk from industrial operating conditions. This project demonstrates applied ML for engineering decision support, converting historical operating data into actionable failure risk predictions.
