@@ -5,6 +5,15 @@ Streamlit dashboard for predictive failure risk assessment.
 Demonstrates applied ML for engineering decision support in industrial settings.
 
 Run with: python -m streamlit run app.py
+
+Features:
+- Real-time risk assessment with dynamic sliders
+- Sensitivity analysis: how one variable affects risk while others stay fixed
+- Risk trend simulation: illustrative demo of risk over time
+- Improved risk driver explanation: engineering-focused interpretation
+- Scenario comparison: current vs. conservative baseline
+- Feature importance and model performance metrics
+- Engineering interpretation and failure mode guidance
 """
 
 import streamlit as st
@@ -13,6 +22,121 @@ import numpy as np
 import joblib
 import json
 import matplotlib.pyplot as plt
+from datetime import datetime, timedelta
+
+# ============================================================================
+# HELPER FUNCTIONS
+# ============================================================================
+
+def generate_sensitivity_analysis(model, features, base_input, variable_to_analyze):
+    """
+    Generate sensitivity analysis for a single variable.
+    
+    Args:
+        model: Trained ML model
+        features: List of feature names
+        base_input: DataFrame with baseline values
+        variable_to_analyze: Feature name to vary
+    
+    Returns:
+        DataFrame with varied values and predictions
+    """
+    # Define ranges for each variable
+    ranges = {
+        "Air temperature": np.linspace(295, 305, 25),
+        "Process temperature": np.linspace(305, 315, 25),
+        "Rotational speed": np.linspace(1100, 3000, 25),
+        "Torque": np.linspace(3, 80, 25),
+        "Tool wear": np.linspace(0, 260, 25)
+    }
+    
+    varied_values = ranges[variable_to_analyze]
+    results = []
+    
+    for value in varied_values:
+        input_copy = base_input.copy()
+        input_copy[variable_to_analyze] = value
+        risk_prob = model.predict_proba(input_copy)[0][1]
+        results.append({
+            "variable_value": value,
+            "failure_risk": risk_prob * 100
+        })
+    
+    return pd.DataFrame(results)
+
+def generate_risk_trend_demo(model, features, base_input, num_points=25):
+    """
+    Generate illustrative risk trend over time (synthetic demo).
+    
+    Tool wear increases gradually, other values vary slightly.
+    """
+    results = []
+    
+    initial_tool_wear = base_input["Tool wear"].values[0]
+    
+    for i in range(num_points):
+        time_fraction = i / (num_points - 1) if num_points > 1 else 0
+        
+        input_copy = base_input.copy()
+        
+        # Gradually increase tool wear
+        input_copy["Tool wear"] = initial_tool_wear + (260 - initial_tool_wear) * time_fraction
+        
+        # Add slight variation to other parameters (±2-3%)
+        input_copy["Air temperature"] += np.random.uniform(-1, 1)
+        input_copy["Process temperature"] += np.random.uniform(-1, 1)
+        input_copy["Rotational speed"] += np.random.uniform(-50, 50)
+        input_copy["Torque"] += np.random.uniform(-2, 2)
+        
+        risk_prob = model.predict_proba(input_copy)[0][1]
+        
+        results.append({
+            "time_point": i,
+            "failure_risk": risk_prob * 100,
+            "tool_wear": input_copy["Tool wear"].values[0]
+        })
+    
+    return pd.DataFrame(results)
+
+def categorize_risk(risk_probability):
+    """Determine risk category and recommendation."""
+    if risk_probability < 0.20:
+        return "LOW RISK", "#0f2f1b", "#dcfce7", "#22c55e", "Continue normal operation. Monitor tool wear periodically."
+    elif risk_probability < 0.50:
+        return "MEDIUM RISK", "#3a2f05", "#fef3c7", "#facc15", "Review operating conditions. Consider preventive maintenance schedule."
+    else:
+        return "HIGH RISK", "#3b0a0a", "#fee2e2", "#ef4444", "Flag for engineering review. Plan maintenance intervention."
+
+def get_risk_driver_explanation(input_data, feature_importance_df, features):
+    """
+    Generate a human-readable explanation of risk drivers.
+    """
+    input_dict = input_data.iloc[0].to_dict()
+    
+    # Identify high-risk factors based on their values
+    high_wear = input_dict["Tool wear"] > 150
+    high_temp = input_dict["Process temperature"] > 312
+    high_speed = input_dict["Rotational speed"] > 2000
+    high_torque = input_dict["Torque"] > 60
+    
+    explanations = []
+    
+    if high_wear:
+        explanations.append("**Tool wear** is elevated, increasing friction and risk of cascading failures.")
+    
+    if high_temp:
+        explanations.append("**Process temperature** is high, which can accelerate thermal fatigue and material degradation.")
+    
+    if high_speed:
+        explanations.append("**Rotational speed** is high, resulting in increased mechanical stress cycles.")
+    
+    if high_torque:
+        explanations.append("**Torque** is significant, stressing bearings and load-bearing components.")
+    
+    if not explanations:
+        explanations.append("Operating conditions are within normal ranges. Risk factors are well-controlled.")
+    
+    return " ".join(explanations)
 
 # ============================================================================
 # PAGE CONFIGURATION
