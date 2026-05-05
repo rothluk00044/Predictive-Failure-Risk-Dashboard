@@ -4,15 +4,17 @@ train_model.py
 Trains a RandomForest classifier on the UCI AI4I 2020 Predictive Maintenance dataset.
 Outputs:
   - failure_model.pkl: trained model
-  - Confusion matrix and classification report to console
+  - model_metrics.json: evaluation metrics and confusion matrix
+  - feature_importance.json: feature importances
 """
 
 import pandas as pd
 import joblib
+import json
 from ucimlrepo import fetch_ucirepo
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier
-from sklearn.metrics import classification_report, confusion_matrix, accuracy_score
+from sklearn.metrics import classification_report, confusion_matrix, accuracy_score, precision_score, recall_score, f1_score
 
 
 def main():
@@ -81,7 +83,13 @@ def main():
     print(cm)
     
     print("\n    Classification Report:")
+    report_dict = classification_report(y_test, predictions, target_names=["No Failure", "Failure"], output_dict=True)
     print(classification_report(y_test, predictions, target_names=["No Failure", "Failure"]))
+    
+    # Compute additional metrics
+    precision = precision_score(y_test, predictions, zero_division=0)
+    recall = recall_score(y_test, predictions, zero_division=0)
+    f1 = f1_score(y_test, predictions, zero_division=0)
     
     # Feature importance
     print("\n[5] Feature Importance")
@@ -93,11 +101,35 @@ def main():
     
     print(feature_importance_df.to_string(index=False))
     
-    # Save model
-    print("\n[6] Saving Model...")
+    # Save model, metrics, and feature importance
+    print("\n[6] Saving Model & Metrics...")
     joblib.dump(model, "failure_model.pkl")
     joblib.dump(features, "model_features.pkl")
-    print("    Saved: failure_model.pkl, model_features.pkl")
+    
+    # Save metrics as JSON
+    metrics = {
+        "train_accuracy": float(train_acc),
+        "test_accuracy": float(test_acc),
+        "precision": float(precision),
+        "recall": float(recall),
+        "f1_score": float(f1),
+        "confusion_matrix": cm.tolist(),
+        "classification_report": report_dict
+    }
+    
+    with open("model_metrics.json", "w") as f:
+        json.dump(metrics, f, indent=2)
+    
+    # Save feature importance as JSON
+    feature_imp_dict = {
+        "features": features,
+        "importances": importances.tolist()
+    }
+    
+    with open("feature_importance.json", "w") as f:
+        json.dump(feature_imp_dict, f, indent=2)
+    
+    print("    Saved: failure_model.pkl, model_features.pkl, model_metrics.json, feature_importance.json")
     
     print("\n" + "=" * 60)
     print("Training complete. Ready to run dashboard with:")

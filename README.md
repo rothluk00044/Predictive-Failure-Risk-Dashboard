@@ -2,9 +2,9 @@
 
 ## Overview
 
-A predictive maintenance dashboard that estimates machine failure risk from industrial operating conditions. This project applies machine learning to real-world predictive maintenance data, converting sensor telemetry into actionable failure risk assessments for engineering and operations teams.
+A predictive maintenance dashboard that estimates machine failure risk from industrial operating conditions. This project demonstrates applied ML for engineering decision support, converting historical operating data into actionable failure risk predictions.
 
-The system trains a classifier on historical failure data and provides real-time predictions through an interactive web interface, enabling data-driven decision-making for maintenance planning, reliability assessment, and operational risk management.
+The system trains a RandomForest classifier on industrial operating telemetry and provides an interactive web interface with real-time predictions, scenario analysis, feature importance visualization, and engineering-oriented recommendations.
 
 ---
 
@@ -56,9 +56,10 @@ python train_model.py
 - Splits data: 80% train, 20% test
 - Trains a RandomForest classifier (100 trees, balanced class weights)
 - Outputs:
-  - **Confusion matrix** & classification report
-  - **Feature importance** (which operating conditions matter most)
-  - **Serialized model** (`failure_model.pkl`)
+  - `failure_model.pkl` – Serialized trained model
+  - `model_features.pkl` – Feature names
+  - `model_metrics.json` – Performance metrics (accuracy, precision, recall, F1, confusion matrix)
+  - `feature_importance.json` – Feature importances
 
 **Example output**:
 ```
@@ -78,16 +79,29 @@ Classification Report:
 python -m streamlit run app.py
 ```
 
-**What you see**:
-- **Operating conditions panel** (sidebar): Adjust temperature, speed, torque, and wear with sliders
-- **Real-time risk prediction**: Model instantly predicts failure probability (0–100%)
-- **Risk categorization**: 
-  - **Low Risk** (<20%): Continue normal operation
-  - **Medium Risk** (20–50%): Review and monitor
-  - **High Risk** (>50%): Flag for immediate review
-- **Recommended actions**: Operations recommendations (e.g., plan maintenance, increase monitoring)
-- **Feature importance chart**: Visual breakdown of which operating factors drive failure risk
-- **Model metadata**: Accuracy, confidence, and prediction details
+**Interactive dashboard with 4 main tabs:**
+
+1. **Dashboard** – Real-time risk assessment
+   - Adjust operating conditions with sliders
+   - View failure risk (0–100%) with risk category
+   - Compare against a conservative baseline scenario
+   - See current operating conditions
+
+2. **Model Insights** – Technical analysis
+   - Feature importance visualization (which inputs matter most)
+   - Risk drivers for current prediction
+   - Model performance metrics (accuracy, precision, recall, F1)
+   - Confusion matrix on test data
+
+3. **Engineering Interpretation** – Failure modes & recommendations
+   - Maps model outputs to potential failure mechanisms (temperature, wear, load stress)
+   - Engineering-oriented action recommendations (low/medium/high risk)
+   - Gates use case framing (predictive durability, testing/validation, maintenance planning)
+
+4. **About** – Project context and future improvements
+   - Dataset and model details
+   - Interview talking points
+   - Future roadmap (real data, SHAP explainability, etc.)
 
 ---
 
