@@ -361,7 +361,7 @@ tab1, tab2, tab3, tab4 = st.tabs(["Dashboard", "Model Insights", "Engineering In
 # TAB 1: DASHBOARD
 # ============================================================================
 with tab1:
-    st.header("🎯 Risk Assessment")
+    st.header("Risk Assessment")
     
     st.markdown("""
     Adjust operating conditions below to see real-time failure risk predictions and recommendations.
@@ -439,7 +439,7 @@ with tab1:
     st.markdown("<div class='section-header'>📋 Current Operating Conditions</div>", unsafe_allow_html=True)
     st.dataframe(
         input_data.T.rename(columns={0: "Value"}),
-        use_container_width=True
+        width='stretch'
     )
     
     # ========================================================================
@@ -526,7 +526,7 @@ with tab2:
     # ========================================================================
     # SENSITIVITY ANALYSIS
     # ========================================================================
-    st.markdown("<div class='section-header'>📊 Sensitivity Analysis</div>", unsafe_allow_html=True)
+    st.markdown("<div class='section-header'>Sensitivity Analysis</div>", unsafe_allow_html=True)
     
     st.markdown("""
     <div class='info-card'>
@@ -677,7 +677,7 @@ with tab2:
     plt.tight_layout()
     st.pyplot(fig)
     
-    st.dataframe(feature_importance_df, use_container_width=True)
+    st.dataframe(feature_importance_df, width='stretch')
     
     # ========================================================================
     # Risk Drivers for Current Prediction
@@ -762,7 +762,7 @@ with tab2:
         columns=["Predicted: No Failure", "Predicted: Failure"],
         index=["Actual: No Failure", "Actual: Failure"]
     )
-    st.dataframe(cm_df, use_container_width=True)
+    st.dataframe(cm_df, width='stretch')
     
     st.markdown("""
     <div class='feature-explanation'>
@@ -778,7 +778,7 @@ with tab2:
 # TAB 3: ENGINEERING INTERPRETATION
 # ============================================================================
 with tab3:
-    st.header("🔧 Engineering Interpretation & Failure Modes")
+    st.header("Engineering Interpretation & Failure Modes")
     
     st.markdown("""
     This section translates model predictions into engineering language, connecting 
@@ -980,7 +980,7 @@ with tab3:
 # TAB 4: ABOUT
 # ============================================================================
 with tab4:
-    st.header("📚 About This Project")
+    st.header("About This Project")
     
     st.markdown("""
     ## Predictive Failure Risk Dashboard
@@ -1040,7 +1040,7 @@ with tab4:
     with col_ds2:
         st.markdown("""
         <div class='info-card'>
-            <div class='info-card-title'>🤖 Model Details</div>
+            <div class='info-card-title'>Model Details</div>
         </div>
         """, unsafe_allow_html=True)
         
@@ -1068,7 +1068,7 @@ with tab4:
     # Test Performance
     st.markdown("""
     <div class='info-card' style='margin-top: 20px;'>
-        <div class='info-card-title'>📈 Model Performance (Test Set)</div>
+        <div class='info-card-title'>Model Performance (Test Set)</div>
     </div>
     """, unsafe_allow_html=True)
     
@@ -1081,7 +1081,7 @@ with tab4:
     # Key Insights
     st.markdown("""
     <div class='info-card' style='margin-top: 20px;'>
-        <div class='info-card-title'>💡 Key Insights</div>
+        <div class='info-card-title'>Key Insights</div>
     </div>
     """, unsafe_allow_html=True)
     
@@ -1105,7 +1105,7 @@ with tab4:
     # Limitations
     st.markdown("""
     <div class='info-card' style='margin-top: 20px;'>
-        <div class='info-card-title'>⚠️ Important Limitations</div>
+        <div class='info-card-title'>Important Limitations</div>
     </div>
     """, unsafe_allow_html=True)
     
@@ -1121,7 +1121,7 @@ with tab4:
     # Future Work
     st.markdown("""
     <div class='info-card' style='margin-top: 20px;'>
-        <div class='info-card-title'>🚀 Future Enhancements</div>
+        <div class='info-card-title'>Future Enhancements</div>
     </div>
     """, unsafe_allow_html=True)
     
