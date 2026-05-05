@@ -361,7 +361,11 @@ tab1, tab2, tab3, tab4 = st.tabs(["Dashboard", "Model Insights", "Engineering In
 # TAB 1: DASHBOARD
 # ============================================================================
 with tab1:
-    st.header("Real-Time Risk Assessment")
+    st.header("🎯 Risk Assessment")
+    
+    st.markdown("""
+    Adjust operating conditions below to see real-time failure risk predictions and recommendations.
+    """)
     
     # Operating conditions sliders
     col_sliders = st.columns(2)
@@ -410,23 +414,9 @@ with tab1:
     confidence = max(model.predict_proba(input_data)[0])
     
     # Determine risk category
-    if risk_probability < 0.20:
-        risk_color = "green"
-        risk_level = "LOW RISK"
-        recommendation = "Continue normal operation. Monitor tool wear periodically."
-        risk_class = "risk-low"
-    elif risk_probability < 0.50:
-        risk_color = "orange"
-        risk_level = "MEDIUM RISK"
-        recommendation = "Review operating conditions. Consider preventive maintenance schedule."
-        risk_class = "risk-medium"
-    else:
-        risk_color = "red"
-        risk_level = "HIGH RISK"
-        recommendation = "Flag for engineering review. Plan maintenance intervention."
-        risk_class = "risk-high"
+    risk_level, bg_color, text_color, border_color, recommendation = categorize_risk(risk_probability)
     
-    # Display risk in large cards
+    # Display risk metrics
     col_risk1, col_risk2, col_risk3 = st.columns(3)
     
     with col_risk1:
@@ -438,12 +428,15 @@ with tab1:
     with col_risk3:
         st.metric("Model Confidence", f"{confidence:.1%}")
     
-    # Recommendation box
-    st.markdown(f"<div class='metric-card {risk_class}'><strong>Recommended Action:</strong><br>{recommendation}</div>", 
-                unsafe_allow_html=True)
+    # Recommendation box with dynamic styling
+    st.markdown(f"""
+    <div class='metric-card' style='background: {bg_color}; color: {text_color}; border-left-color: {border_color};'>
+        <strong>Recommended Action:</strong><br>{recommendation}
+    </div>
+    """, unsafe_allow_html=True)
     
     # Current operating conditions
-    st.subheader("Current Operating Conditions")
+    st.markdown("<div class='section-header'>📋 Current Operating Conditions</div>", unsafe_allow_html=True)
     st.dataframe(
         input_data.T.rename(columns={0: "Value"}),
         use_container_width=True
@@ -452,23 +445,44 @@ with tab1:
     # ========================================================================
     # SCENARIO COMPARISON
     # ========================================================================
-    st.subheader("Scenario Comparison")
-    st.markdown("Compare current conditions against a safer baseline.")
+    st.markdown("<div class='section-header'>⚖️ Scenario Comparison</div>", unsafe_allow_html=True)
+    
+    st.markdown("""
+    <div class='info-card'>
+        <div class='info-card-title'>What is this?</div>
+        Compare your current operating conditions against a conservative baseline scenario 
+        to understand relative risk levels and potential improvements.
+    </div>
+    """, unsafe_allow_html=True)
     
     col_scenario1, col_scenario2 = st.columns(2)
     
     with col_scenario1:
-        st.write("**Current Scenario**")
-        st.write(f"- Air Temp: {air_temp:.1f} K")
-        st.write(f"- Process Temp: {process_temp:.1f} K")
-        st.write(f"- Speed: {rot_speed:.0f} rpm")
-        st.write(f"- Torque: {torque:.1f} Nm")
-        st.write(f"- Wear: {tool_wear:.0f} min")
-        current_risk_display = f"**Risk: {risk_probability:.1%}**"
-        st.write(current_risk_display)
+        st.markdown("""
+        <div class='scenario-box'>
+            <div class='scenario-title'>🔴 Current Scenario</div>
+        </div>
+        """, unsafe_allow_html=True)
+        
+        st.write(f"**Air Temperature:** {air_temp:.1f} K")
+        st.write(f"**Process Temperature:** {process_temp:.1f} K")
+        st.write(f"**Rotational Speed:** {rot_speed:.0f} rpm")
+        st.write(f"**Torque:** {torque:.1f} Nm")
+        st.write(f"**Tool Wear:** {tool_wear:.0f} min")
+        
+        st.markdown(f"""
+        <div style='background: {bg_color}; color: {text_color}; padding: 12px; border-radius: 8px; margin-top: 10px; font-weight: 700;'>
+        Risk: {risk_probability:.1%}
+        </div>
+        """, unsafe_allow_html=True)
     
     with col_scenario2:
-        st.write("**Conservative Baseline** (Lower Stress)")
+        st.markdown("""
+        <div class='scenario-box'>
+            <div class='scenario-title'>🟢 Conservative Baseline</div>
+        </div>
+        """, unsafe_allow_html=True)
+        
         baseline_data = pd.DataFrame([{
             "Air temperature": 298.0,
             "Process temperature": 308.0,
@@ -478,19 +492,26 @@ with tab1:
         }])
         baseline_risk = model.predict_proba(baseline_data)[0][1]
         
-        st.write(f"- Air Temp: 298.0 K")
-        st.write(f"- Process Temp: 308.0 K")
-        st.write(f"- Speed: 1200 rpm")
-        st.write(f"- Torque: 30.0 Nm")
-        st.write(f"- Wear: 50 min")
-        baseline_risk_display = f"**Risk: {baseline_risk:.1%}**"
-        st.write(baseline_risk_display)
+        st.write(f"**Air Temperature:** 298.0 K")
+        st.write(f"**Process Temperature:** 308.0 K")
+        st.write(f"**Rotational Speed:** 1200 rpm")
+        st.write(f"**Torque:** 30.0 Nm")
+        st.write(f"**Tool Wear:** 50 min")
+        
+        st.markdown(f"""
+        <div style='background: #0f2f1b; color: #dcfce7; padding: 12px; border-radius: 8px; margin-top: 10px; font-weight: 700;'>
+        Risk: {baseline_risk:.1%}
+        </div>
+        """, unsafe_allow_html=True)
     
+    # Risk comparison
     risk_delta = (risk_probability - baseline_risk) * 100
     if risk_delta > 0:
-        st.warning(f"Current scenario is **{risk_delta:.1f}% higher risk** than baseline. Consider stress reduction.")
+        st.warning(f"⚠️ Current scenario is **{risk_delta:.1f}% higher risk** than conservative baseline. Consider reducing stress on critical components.")
+    elif risk_delta < -5:
+        st.success(f"✅ Current scenario is **{-risk_delta:.1f}% lower risk** than conservative baseline. Good operating margin.")
     else:
-        st.success(f"Current scenario is **{-risk_delta:.1f}% lower risk** than baseline.")
+        st.info(f"ℹ️ Current scenario risk is comparable to conservative baseline (within {abs(risk_delta):.1f}%).")
 
 # ============================================================================
 # TAB 2: MODEL INSIGHTS
