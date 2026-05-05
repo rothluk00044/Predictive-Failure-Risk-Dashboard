@@ -436,7 +436,7 @@ with tab1:
     """, unsafe_allow_html=True)
     
     # Current operating conditions
-    st.markdown("<div class='section-header'>📋 Current Operating Conditions</div>", unsafe_allow_html=True)
+    st.markdown("<div class='section-header'>Current Operating Conditions</div>", unsafe_allow_html=True)
     st.dataframe(
         input_data.T.rename(columns={0: "Value"}),
         width='stretch'
@@ -445,7 +445,7 @@ with tab1:
     # ========================================================================
     # SCENARIO COMPARISON
     # ========================================================================
-    st.markdown("<div class='section-header'>⚖️ Scenario Comparison</div>", unsafe_allow_html=True)
+    st.markdown("<div class='section-header'>Scenario Comparison</div>", unsafe_allow_html=True)
     
     st.markdown("""
     <div class='info-card'>
@@ -507,11 +507,11 @@ with tab1:
     # Risk comparison
     risk_delta = (risk_probability - baseline_risk) * 100
     if risk_delta > 0:
-        st.warning(f"⚠️ Current scenario is **{risk_delta:.1f}% higher risk** than conservative baseline. Consider reducing stress on critical components.")
+        st.warning(f"Current scenario is **{risk_delta:.1f}% higher risk** than conservative baseline. Consider reducing stress on critical components.")
     elif risk_delta < -5:
-        st.success(f"✅ Current scenario is **{-risk_delta:.1f}% lower risk** than conservative baseline. Good operating margin.")
+        st.success(f"Current scenario is **{-risk_delta:.1f}% lower risk** than conservative baseline. Good operating margin.")
     else:
-        st.info(f"ℹ️ Current scenario risk is comparable to conservative baseline (within {abs(risk_delta):.1f}%).")
+        st.info(f"ℹCurrent scenario risk is comparable to conservative baseline (within {abs(risk_delta):.1f}%).")
 
 # ============================================================================
 # TAB 2: MODEL INSIGHTS
@@ -594,12 +594,12 @@ with tab2:
     # ========================================================================
     # RISK TREND SIMULATION
     # ========================================================================
-    st.markdown("<div class='section-header'>📈 Risk Trend Simulation (Illustrative Demo)</div>", unsafe_allow_html=True)
+    st.markdown("<div class='section-header'>Risk Trend Simulation (Illustrative Demo)</div>", unsafe_allow_html=True)
     
     st.markdown("""
     <div class='info-card'>
-        <div class='info-card-title'>⚠️ Demo Data</div>
-        This is <strong>synthetic illustrative data</strong>, not real field telemetry or Gates product data. 
+        <div class='info-card-title'>Demo Data</div>
+        This is <strong>synthetic illustrative data</strong>, not real field telemetry
         It demonstrates how a production dashboard could monitor and visualize risk trends over time.
     </div>
     """, unsafe_allow_html=True)
@@ -657,7 +657,7 @@ with tab2:
     # ========================================================================
     # Feature Importance
     # ========================================================================
-    st.markdown("<div class='section-header'>⚙️ Feature Importance in Prediction</div>", unsafe_allow_html=True)
+    st.markdown("<div class='section-header'>Feature Importance in Prediction</div>", unsafe_allow_html=True)
     
     st.markdown("""
     <div class='info-card'>
@@ -682,7 +682,7 @@ with tab2:
     # ========================================================================
     # Risk Drivers for Current Prediction
     # ========================================================================
-    st.markdown("<div class='section-header'>🎯 Risk Drivers (Current Prediction)</div>", unsafe_allow_html=True)
+    st.markdown("<div class='section-header'>Risk Drivers (Current Prediction)</div>", unsafe_allow_html=True)
     
     st.markdown("""
     <div class='info-card'>
@@ -739,7 +739,7 @@ with tab2:
     # ========================================================================
     # Model Performance Metrics
     # ========================================================================
-    st.markdown("<div class='section-header'>📊 Model Performance (Test Set)</div>", unsafe_allow_html=True)
+    st.markdown("<div class='section-header'>Model Performance (Test Set)</div>", unsafe_allow_html=True)
     
     st.markdown("""
     <div class='info-card'>
@@ -789,14 +789,14 @@ with tab3:
     # ========================================================================
     # Failure Mode Mapping
     # ========================================================================
-    st.markdown("<div class='section-header'>⚡ Potential Failure Mode Pathways</div>", unsafe_allow_html=True)
+    st.markdown("<div class='section-header'>Potential Failure Mode Pathways</div>", unsafe_allow_html=True)
     
     col_modes1, col_modes2 = st.columns(2)
     
     with col_modes1:
         st.markdown("""
         <div class='info-card'>
-            <div class='info-card-title'>🔥 Thermal Stress Pathway</div>
+            <div class='info-card-title'>Thermal Stress Pathway</div>
         </div>
         """, unsafe_allow_html=True)
         
@@ -814,7 +814,7 @@ with tab3:
         
         st.markdown("""
         <div class='info-card'>
-            <div class='info-card-title'>⚙️ Mechanical Stress Pathway</div>
+            <div class='info-card-title'>Mechanical Stress Pathway</div>
         </div>
         """, unsafe_allow_html=True)
         
@@ -833,7 +833,7 @@ with tab3:
     with col_modes2:
         st.markdown("""
         <div class='info-card'>
-            <div class='info-card-title'>🛠️ Wear & Degradation Pathway</div>
+            <div class='info-card-title'>Wear & Degradation Pathway</div>
         </div>
         """, unsafe_allow_html=True)
         
@@ -852,7 +852,7 @@ with tab3:
         
         st.markdown("""
         <div class='info-card'>
-            <div class='info-card-title'>🌡️ Combined Stress Scenario</div>
+            <div class='info-card-title'>Combined Stress Scenario</div>
         </div>
         """, unsafe_allow_html=True)
         
@@ -872,11 +872,11 @@ with tab3:
     # ========================================================================
     # Engineering Recommendations
     # ========================================================================
-    st.markdown("<div class='section-header'>💡 Engineering Recommendations</div>", unsafe_allow_html=True)
+    st.markdown("<div class='section-header'>Engineering Recommendations</div>", unsafe_allow_html=True)
     
     if risk_probability < 0.20:
         st.success("""
-        ### ✅ Low Risk Zone – Continue Normal Operation
+        ### Low Risk Zone – Continue Normal Operation
         
         **Operational Guidance:**
         - Continue standard operating procedures
@@ -893,7 +893,7 @@ with tab3:
     
     elif risk_probability < 0.50:
         st.warning("""
-        ### ⚠️ Medium Risk Zone – Plan Maintenance Window
+        ### Medium Risk Zone – Plan Maintenance Window
         
         **Operational Guidance:**
         - Increase monitoring frequency and detail
@@ -916,7 +916,7 @@ with tab3:
     
     else:
         st.error("""
-        ### 🚨 High Risk Zone – Urgent Action Required
+        ### High Risk Zone – Urgent Action Required
         
         **Immediate Actions:**
         1. **REDUCE OPERATING STRESS** immediately
@@ -943,7 +943,7 @@ with tab3:
     # ========================================================================
     # Gates Relevance
     # ========================================================================
-    st.markdown("<div class='section-header'>🏭 Applied ML in Engineering – Use Cases</div>", unsafe_allow_html=True)
+    st.markdown("<div class='section-header'>Applied ML in Engineering – Use Cases</div>", unsafe_allow_html=True)
     
     st.markdown("""
     This dashboard demonstrates how predictive analytics supports real engineering workflows:
@@ -1002,7 +1002,6 @@ with tab4:
     - **Scenario Comparison:** Decisions are relative—compare against a baseline
     - **Risk Trend Simulation:** Show how to monitor risk over time (not just one-off predictions)
     - **Engineering Interpretation:** Translate ML outputs to failure modes engineers recognize
-    - **Honest Framing:** Be clear about what is demo data vs. real product data
     
     ---
     
@@ -1014,7 +1013,7 @@ with tab4:
     with col_ds1:
         st.markdown("""
         <div class='info-card'>
-            <div class='info-card-title'>📊 Dataset</div>
+            <div class='info-card-title'>Dataset</div>
         </div>
         """, unsafe_allow_html=True)
         
@@ -1111,10 +1110,9 @@ with tab4:
     
     st.markdown("""
     ✗ **Not production software** – For demonstration only  
-    ✗ **Not based on real Gates data** – Synthetic dataset for learning  
     ✗ **Not replacing physical testing** – Use alongside validation programs  
     ✗ **No proprietary models** – Simple open-source algorithms  
-    ✗ **Binary predictions only** – Doesn't distinguish failure modes  
+    ✗ **Binary predictions only** – Doesn't distinguish failure modes as of current
     ✗ **No uncertainty quantification** – Point estimates, not confidence intervals  
     """)
     
