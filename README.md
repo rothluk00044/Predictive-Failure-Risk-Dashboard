@@ -1,6 +1,7 @@
 # Predictive Failure Risk Dashboard # test new branch commit
 
 # If using PS, launch browser via: python -m streamlit run app.py 
+Note you must have all dependencies installed + model properly trained prior to launching
 
 ## Overview
 
